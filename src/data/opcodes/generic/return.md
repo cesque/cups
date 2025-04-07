@@ -4,9 +4,7 @@ code: return
 name: Return
 category: generic
 description: Pop an address from the call stack and jump to that address
-operands:
-    - type: integer
-      write: false
+operands: []
 ---
 
 Mostly for use with [call](/opcodes/call), but the call stack can also be manually manipulated.

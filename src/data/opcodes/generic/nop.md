@@ -6,4 +6,3 @@ category: generic
 description: Does nothing.
 operands: []
 ---
-Hello world
