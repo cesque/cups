@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content'
+import Layout from '@/layouts/Layout.astro'
+import InfoTable from '@/components/InfoTable.astro'
+import type { OpCode } from '@/types/OpCode'
+
+export async function getStaticPaths() {
+    const opcodes = await getCollection('opcodes')
+
+    return opcodes.map(opcode => {
+        return {
+            params: {
+                name: opcode.data.code
+            },
+            props: {
+                entry: opcode,
+            },
+        }
+    })
+}
+
+const { entry } = Astro.props
+const { data, id } = entry
+const { Content, headings } = await render(entry)
+
+const opcode: OpCode = data
+---
+<Layout>
+    <h1>{opcode.code.toUpperCase()} — {opcode.name}</h1>
+    <p>{opcode.description}</p>
+
+    <InfoTable opcode={opcode} />
+
+    <Content />
+</Layout>
+<!-- <Content /> -->

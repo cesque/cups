@@ -1,11 +1,65 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content'
+import Layout from '../layouts/Layout.astro'
+import type { OpCodeCategory } from '@/types/OpCode'
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
+const opcodes = await getCollection('opcodes')
+
+const grouped = Object.groupBy(opcodes, opcode => {
+    return opcode.data.category
+})
+
+const categoryNames: Record<OpCodeCategory, string> = {
+    generic: 'Generic',
+    jump: 'Jump',
+    integer: 'Integer',
+    'global-stack': 'Global Stack',
+}
 ---
 
 <Layout>
-	<Welcome />
+	<h1>CUPS Specification</h1>
+
+    <p>
+        <b>CUPS</b> (CPU architecture with Unbounded Per-address Stacks) is a
+        fictional CPU architecture, wherein every memory address (as well as
+        registers) contains not just a single numerical value, but instead a
+        fully unbounded stack. Documented here the the specification for CUPS
+        as well as additional information about its implementation and design.
+    </p>
+
+    <h2>Documentation</h2>
+
+    <ul>
+        <li><a href="/addressing-modes">Addressing modes</a></li>
+        <li><a href="/polymorphism">Polymorphism</a></li>
+        <li><a href="/labels">Labels</a></li>
+    </ul>
+
+    <h2>Instructions</h2>
+
+    {
+        Object.entries(grouped).map(([key, opcodes]) => {
+            const sorted = [...opcodes]
+            sorted.sort((a, b) => a.data.value - b.data.value)
+
+            return <>
+                <h3>{categoryNames[key as OpCodeCategory]}</h3>
+                <table>
+                    {
+                        sorted.map(opcode => {
+                            return <tr>
+                                <th><a href={`/opcodes/${opcode.data.code}`}>{opcode.data.code.toUpperCase()}</a></th>
+                                <td>{opcode.data.name}</td>
+                                <td>{opcode.data.description}</td>
+                            </tr>
+                        })
+                    }
+                </table>
+            </>
+        })
+    }
 </Layout>

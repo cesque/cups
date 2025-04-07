@@ -12,11 +12,39 @@
 	</body>
 </html>
 
-<style>
+<style is:global>
+    * {
+        box-sizing: border-box;
+    }
+
 	html,
 	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
+        font-size: 1rem;
+		margin: 10px;
+        padding-bottom: 25vh;
 	}
+
+    table {
+        border-collapse: collapse;
+        min-width: 200px;
+        text-align: left;
+        border-spacing: 5px;
+    }
+
+    table, td, th {
+        border: 1px solid black;
+    }
+
+    td, th {
+        padding: 3px;
+    }
+
+    pre {
+        padding: 5px;
+        background: #eee;
+    }
+
+    h2, h3, h4, h5, h6 {
+        margin-top: 2em;
+    }
 </style>

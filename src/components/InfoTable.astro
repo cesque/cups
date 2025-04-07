@@ -1,0 +1,47 @@
+---
+import type { OpCode, OperandTypeHint } from '@/types/OpCode'
+
+interface Props {
+    opcode: OpCode
+}
+
+const { opcode } = Astro.props
+
+const operandTypeMap: Record<OperandTypeHint, string> = {
+    integer: 'I',
+    string: 'S',
+    stack: '#',
+    boolean: 'B',
+}
+---
+<table>
+    <tr>
+        <th>Category</th>
+        <td>{opcode.category}</td>
+    </tr>
+    <tr>
+        <th>Value</th>
+        <td>{opcode.value}</td>
+    </tr>
+    <tr>
+        <th>Arity</th>
+        <td>{opcode.operands.length}</td>
+    </tr>
+    <tr>
+        <th>Signature</th>
+        <td>
+            <code>
+                {opcode.code}
+                {
+                    opcode.operands.map(operand => {
+                        if (operand.write) {
+                            return <><u>{operandTypeMap[operand.type]}</u> </>
+                        } else {
+                            return <>{operandTypeMap[operand.type]} </>
+                        }
+                    })
+                }
+            </code>
+        </td>
+    </tr>
+<table>
